@@ -5,25 +5,43 @@ const proxy = require('http-proxy-middleware');
 const PORT = 3000;
 const app = express();
 
-app.use('/restaurants/*', express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
-var options = {
+var resOptions = {
     target: 'http://localhost:3010/', // target host
     changeOrigin: true, // needed for virtual hosted sites
     ws: true, // proxy websockets
-    // pathRewrite: {
-    //   '^/api/old-path': '/api/new-path', // rewrite path
-    //   '^/api/remove/path': '/path' // remove base path
-    // }
-  }
+}
    
-app.use('/reservations', proxy(options));
+app.use('/reservations', proxy(resOptions));
 
-app.get('/res/:name', function(req, res) {
-    res.header("X-Content-Type", "text/javascript");
-    res.sendFile(path.join(__dirname, '../public/index.html'))
+var menuOptions = {
+    target: 'http://localhost:3003/', // target host
+    changeOrigin: true, // needed for virtual hosted sites
+    ws: true, // proxy websockets
+}
+
+app.use('/API/restaurant', proxy(menuOptions));
+
+var picOptions = {
+    target: 'http://localhost:3002/', // target host
+    changeOrigin: true, // needed for virtual hosted sites
+    ws: true, // proxy websockets
+}
+
+app.use('/restaurants', proxy(picOptions));
+
+var reviewOptions = {
+    target: 'http://localhost:3007/', // target host
+    changeOrigin: true, // needed for virtual hosted sites
+    ws: true, // proxy websockets
+}
+
+app.use('/reviews', proxy(reviewOptions));
+
+app.get('/restaurant/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
-
 
 app.listen(PORT, () => {
     console.log('Listening on port', PORT);
