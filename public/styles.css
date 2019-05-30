@@ -1,0 +1,24 @@
+#page {
+    display: flex;
+    flex-direction: column;
+}
+#reservations {
+    position: absolute;
+    top: 100px;
+    right: 100px;
+    background-color: white;
+}
+
+#menu {
+    margin: 0px 100px;
+    width: 60%;
+    background-color: white;
+}
+
+#review {
+    background-color: white;
+    margin: 30px 100px;
+}
+
+#root {
+}
